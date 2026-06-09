@@ -9,11 +9,11 @@ class Product:
     quantity: int
 
     def __init__(
-        self,
-        name: str,
-        description: str,
-        price: float,
-        quantity: int,
+            self,
+            name: str,
+            description: str,
+            price: float,
+            quantity: int,
     ) -> None:
         """Инициализирует объект товара."""
         self.name = name
@@ -38,7 +38,7 @@ class Product:
 
     @price.setter
     def price(self, new_price: float) -> None:
-        """Устанавливает новую цену товара, если она положительная."""
+        """Устанавливает новую цену товара."""
         if new_price <= 0:
             print("Цена не должна быть нулевая или отрицательная")
             return
@@ -56,10 +56,10 @@ class Category:
     description: str
 
     def __init__(
-        self,
-        name: str,
-        description: str,
-        products: list[Product],
+            self,
+            name: str,
+            description: str,
+            products: list[Product],
     ) -> None:
         """Инициализирует объект категории."""
         self.name = name
