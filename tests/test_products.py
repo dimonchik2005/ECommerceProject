@@ -100,3 +100,18 @@ def test_product_price_setter_zero(product: Product, capsys) -> None:
 
     assert product.price == 180000.0
     assert "Цена не должна быть нулевая или отрицательная" in captured.out
+
+
+def test_product_str(product: Product) -> None:
+    """Проверяет строковое представление товара."""
+    assert str(product) == ("Samsung Galaxy S23 Ultra, 180000.0 руб. Остаток: 5 шт.")
+
+
+def test_category_str(category: Category) -> None:
+    """Проверяет строковое представление категории."""
+    assert str(category) == "Смартфоны, количество продуктов: 13 шт."
+
+
+def test_product_add(product: Product, product2: Product) -> None:
+    """Проверяет сложение товаров."""
+    assert product + product2 == 2580000.0

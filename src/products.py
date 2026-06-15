@@ -9,17 +9,25 @@ class Product:
     quantity: int
 
     def __init__(
-            self,
-            name: str,
-            description: str,
-            price: float,
-            quantity: int,
+        self,
+        name: str,
+        description: str,
+        price: float,
+        quantity: int,
     ) -> None:
         """Инициализирует объект товара."""
         self.name = name
         self.description = description
         self.__price = price
         self.quantity = quantity
+
+    def __str__(self) -> str:
+        """Возвращает строковое представление товара."""
+        return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
+
+    def __add__(self, other: "Product") -> float:
+        """Возвращает общую стоимость двух товаров на складе."""
+        return self.price * self.quantity + other.price * other.quantity
 
     @classmethod
     def new_product(cls, product_data: dict[str, Any]) -> "Product":
@@ -56,10 +64,10 @@ class Category:
     description: str
 
     def __init__(
-            self,
-            name: str,
-            description: str,
-            products: list[Product],
+        self,
+        name: str,
+        description: str,
+        products: list[Product],
     ) -> None:
         """Инициализирует объект категории."""
         self.name = name
@@ -68,6 +76,15 @@ class Category:
 
         Category.category_count += 1
         Category.product_count += len(products)
+
+    def __str__(self) -> str:
+        """Возвращает строковое представление категории."""
+        total_quantity = 0
+
+        for product in self.__products:
+            total_quantity += product.quantity
+
+        return f"{self.name}, количество продуктов: {total_quantity} шт."
 
     def add_product(self, product: Product) -> None:
         """Добавляет товар в категорию."""
@@ -80,9 +97,6 @@ class Category:
         result = ""
 
         for product in self.__products:
-            result += (
-                f"{product.name}, {product.price} руб. "
-                f"Остаток: {product.quantity} шт.\n"
-            )
+            result += f"{product}\n"
 
         return result
