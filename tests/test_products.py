@@ -1,4 +1,6 @@
-from src.products import Category, Product
+import pytest
+
+from src.products import Category, LawnGrass, Product, Smartphone
 
 
 def test_product_initialization(product: Product) -> None:
@@ -115,3 +117,59 @@ def test_category_str(category: Category) -> None:
 def test_product_add(product: Product, product2: Product) -> None:
     """Проверяет сложение товаров."""
     assert product + product2 == 2580000.0
+
+
+def test_smartphone_initialization(smartphone: Smartphone) -> None:
+    """Проверяет создание объекта Smartphone."""
+    assert smartphone.name == "Samsung Galaxy S23 Ultra"
+    assert smartphone.description == "256GB, Серый цвет, 200MP камера"
+    assert smartphone.price == 180000.0
+    assert smartphone.quantity == 5
+    assert smartphone.efficiency == 95.5
+    assert smartphone.model == "S23 Ultra"
+    assert smartphone.memory == 256
+    assert smartphone.color == "Серый"
+
+
+def test_lawn_grass_initialization(lawn_grass: LawnGrass) -> None:
+    """Проверяет создание объекта LawnGrass."""
+    assert lawn_grass.name == "Газонная трава"
+    assert lawn_grass.description == "Элитная трава для газона"
+    assert lawn_grass.price == 500.0
+    assert lawn_grass.quantity == 20
+    assert lawn_grass.country == "Россия"
+    assert lawn_grass.germination_period == "7 дней"
+    assert lawn_grass.color == "Зеленый"
+
+
+def test_add_same_product_class(
+    smartphone: Smartphone,
+    smartphone2: Smartphone,
+) -> None:
+    """Проверяет сложение товаров одного класса."""
+    assert smartphone + smartphone2 == 2580000.0
+
+
+def test_add_different_product_classes(
+    smartphone: Smartphone,
+    lawn_grass: LawnGrass,
+) -> None:
+    """Проверяет запрет сложения товаров разных классов."""
+    with pytest.raises(TypeError):
+        smartphone + lawn_grass
+
+
+def test_add_product_inherited_class(smartphone: Smartphone) -> None:
+    """Проверяет добавление наследника Product в категорию."""
+    category = Category("Смартфоны", "Описание", [])
+
+    category.add_product(smartphone)
+
+    assert "Samsung Galaxy S23 Ultra" in category.products
+    assert Category.product_count == 1
+
+
+def test_add_product_wrong_type(category: Category) -> None:
+    """Проверяет запрет добавления объекта не Product."""
+    with pytest.raises(TypeError):
+        category_smartphones.add_product("Not a product")  # type: ignore
