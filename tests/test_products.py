@@ -1,6 +1,6 @@
 import pytest
 
-from src.products import Category, LawnGrass, Product, Smartphone
+from src.products import BaseProduct, Category, LawnGrass, Product, Smartphone
 
 
 def test_product_initialization(product: Product) -> None:
@@ -172,4 +172,59 @@ def test_add_product_inherited_class(smartphone: Smartphone) -> None:
 def test_add_product_wrong_type(category: Category) -> None:
     """Проверяет запрет добавления объекта не Product."""
     with pytest.raises(TypeError):
-        category_smartphones.add_product("Not a product")  # type: ignore
+        category.add_product("Not a product")  # type: ignore[arg-type]
+
+
+def test_base_product_is_abstract() -> None:
+    """Проверяет, что BaseProduct является абстрактным классом."""
+    with pytest.raises(TypeError):
+        BaseProduct()  # type: ignore[abstract]
+
+
+def test_product_mixin_print(capsys: pytest.CaptureFixture[str]) -> None:
+    """Проверяет вывод миксина при создании Product."""
+    Product("Test product", "Test description", 100.0, 2)
+    captured = capsys.readouterr()
+
+    assert "Product('Test product', 'Test description', 100.0, 2)" in captured.out
+
+
+def test_smartphone_mixin_print(capsys: pytest.CaptureFixture[str]) -> None:
+    """Проверяет вывод миксина при создании Smartphone."""
+    Smartphone(
+        "Samsung Galaxy S23 Ultra",
+        "256GB, Серый цвет, 200MP камера",
+        180000.0,
+        5,
+        95.5,
+        "S23 Ultra",
+        256,
+        "Серый",
+    )
+    captured = capsys.readouterr()
+
+    assert (
+        "Smartphone('Samsung Galaxy S23 Ultra', "
+        "'256GB, Серый цвет, 200MP камера', "
+        "180000.0, 5, 95.5, 'S23 Ultra', 256, 'Серый')"
+    ) in captured.out
+
+
+def test_lawn_grass_mixin_print(capsys: pytest.CaptureFixture[str]) -> None:
+    """Проверяет вывод миксина при создании LawnGrass."""
+    LawnGrass(
+        "Газонная трава",
+        "Элитная трава для газона",
+        500.0,
+        20,
+        "Россия",
+        "7 дней",
+        "Зеленый",
+    )
+    captured = capsys.readouterr()
+
+    assert (
+        "LawnGrass('Газонная трава', "
+        "'Элитная трава для газона', "
+        "500.0, 20, 'Россия', '7 дней', 'Зеленый')"
+    ) in captured.out
