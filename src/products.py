@@ -1,7 +1,29 @@
+from abc import ABC, abstractmethod
 from typing import Any
 
 
-class Product:
+class BaseProduct(ABC):
+    """Абстрактный базовый класс для всех продуктов."""
+
+    @abstractmethod
+    def __str__(self) -> str:
+        """Возвращает строковое представление продукта."""
+
+    @abstractmethod
+    def __add__(self, other: "Product") -> float:
+        """Складывает продукты."""
+
+
+class PrintMixin:
+    """Миксин для вывода информации о создании объекта."""
+
+    def __init__(self) -> None:
+        """Выводит информацию о созданном объекте."""
+        print(repr(self))
+        super().__init__()
+
+
+class Product(PrintMixin, BaseProduct):
     """Класс для описания товара."""
 
     name: str
@@ -20,6 +42,18 @@ class Product:
         self.description = description
         self.__price = price
         self.quantity = quantity
+        super().__init__()
+
+    def __repr__(self) -> str:
+        """Возвращает техническое строковое представление объекта."""
+        return (
+            f"{type(self).__name__}("
+            f"{self.name!r}, "
+            f"{self.description!r}, "
+            f"{self.price}, "
+            f"{self.quantity}"
+            f")"
+        )
 
     def __str__(self) -> str:
         """Возвращает строковое представление товара."""
@@ -77,11 +111,26 @@ class Smartphone(Product):
         color: str,
     ) -> None:
         """Инициализирует объект смартфона."""
-        super().__init__(name, description, price, quantity)
         self.efficiency = efficiency
         self.model = model
         self.memory = memory
         self.color = color
+        super().__init__(name, description, price, quantity)
+
+    def __repr__(self) -> str:
+        """Возвращает техническое строковое представление смартфона."""
+        return (
+            f"{type(self).__name__}("
+            f"{self.name!r}, "
+            f"{self.description!r}, "
+            f"{self.price}, "
+            f"{self.quantity}, "
+            f"{self.efficiency}, "
+            f"{self.model!r}, "
+            f"{self.memory}, "
+            f"{self.color!r}"
+            f")"
+        )
 
 
 class LawnGrass(Product):
@@ -102,10 +151,24 @@ class LawnGrass(Product):
         color: str,
     ) -> None:
         """Инициализирует объект газонной травы."""
-        super().__init__(name, description, price, quantity)
         self.country = country
         self.germination_period = germination_period
         self.color = color
+        super().__init__(name, description, price, quantity)
+
+    def __repr__(self) -> str:
+        """Возвращает техническое строковое представление газонной травы."""
+        return (
+            f"{type(self).__name__}("
+            f"{self.name!r}, "
+            f"{self.description!r}, "
+            f"{self.price}, "
+            f"{self.quantity}, "
+            f"{self.country!r}, "
+            f"{self.germination_period!r}, "
+            f"{self.color!r}"
+            f")"
+        )
 
 
 class Category:
