@@ -228,3 +228,24 @@ def test_lawn_grass_mixin_print(capsys: pytest.CaptureFixture[str]) -> None:
         "'Элитная трава для газона', "
         "500.0, 20, 'Россия', '7 дней', 'Зеленый')"
     ) in captured.out
+
+
+def test_product_zero_quantity() -> None:
+    """Проверяет запрет создания товара с нулевым количеством."""
+    with pytest.raises(
+        ValueError,
+        match="Товар с нулевым количеством не может быть добавлен",
+    ):
+        Product("Test product", "Test description", 100.0, 0)
+
+
+def test_category_middle_price(category: Category) -> None:
+    """Проверяет расчет среднего ценника товаров категории."""
+    assert category.middle_price() == 195000.0
+
+
+def test_category_middle_price_empty() -> None:
+    """Проверяет средний ценник пустой категории."""
+    category = Category("Пустая категория", "Описание", [])
+
+    assert category.middle_price() == 0

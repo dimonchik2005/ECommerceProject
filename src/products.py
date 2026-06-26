@@ -38,6 +38,9 @@ class Product(PrintMixin, BaseProduct):
         quantity: int,
     ) -> None:
         """Инициализирует объект товара."""
+        if quantity == 0:
+            raise ValueError("Товар с нулевым количеством не может быть добавлен")
+
         self.name = name
         self.description = description
         self.__price = price
@@ -204,6 +207,15 @@ class Category:
             total_quantity += product.quantity
 
         return f"{self.name}, количество продуктов: {total_quantity} шт."
+
+    def middle_price(self) -> float:
+        """Возвращает средний ценник товаров в категории."""
+        try:
+            return sum(product.price for product in self.__products) / len(
+                self.__products
+            )
+        except ZeroDivisionError:
+            return 0
 
     def add_product(self, product: Product) -> None:
         """Добавляет товар в категорию."""
